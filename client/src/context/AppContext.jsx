@@ -15,7 +15,10 @@ export const AppContextProvider = ({ children }) => {
  
     const getAuthState = async () => {
         try {
-          const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
+            const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`, {
+                withCredentials: true,
+              });
+              
           if (data.success) {
             setIsLoggedIn(true);
             if (!userData) await getUserData();

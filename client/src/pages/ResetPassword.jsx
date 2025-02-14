@@ -61,7 +61,9 @@ const ResetPassword = () => {
     try {
       setIsLoading(true); // Set loading state to true
       const { data } = await axios.post(
-        `${backendUrl}/api/auth/send-reset-otp`, { email });
+        `${backendUrl}/api/auth/send-reset-otp`, { email }, {
+          withCredentials: true,
+        });
 
       if (data.success) {
         toast.success(data.message); // Show success toast
@@ -100,7 +102,9 @@ const ResetPassword = () => {
       setIsLoading(true); // Set loading state to true
       const { data } = await axios.post(
         `${backendUrl}/api/auth/reset-password`,
-        { email, otp, newPassword, confirmPassword });
+        { email, otp, newPassword, confirmPassword }, {
+          withCredentials: true,
+        });
       if (data.success) {
         toast.success(data.message); // Show success toast
         // Reset form states

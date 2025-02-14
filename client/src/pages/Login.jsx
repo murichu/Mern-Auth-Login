@@ -27,7 +27,9 @@ const Login = () => {
       const payload =
         state === "login" ? { email, password } : { name, email, password };
 
-        const { data } = await axios.post(endpoint, payload);
+        const { data } = await axios.post(endpoint, payload, {
+          withCredentials: true,
+        });
 
       if (data.success) {
         setIsLoggedIn(true);
