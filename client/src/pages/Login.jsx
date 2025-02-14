@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext} from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from '../context/AppContext'
@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 const Login = () => {
   const navigate = useNavigate();
 
-  const { backendUrl, token, setToken, setIsLoggedIn, getUserData } = useContext(AppContext);
+  const { backendUrl,setIsLoggedIn, getUserData } = useContext(AppContext);
 
   const [state, setState] = useState("login");
   const [name, setName] = useState("");
@@ -27,15 +27,9 @@ const Login = () => {
       const payload =
         state === "login" ? { email, password } : { name, email, password };
 
-        const { data } = await axios.post(endpoint, payload, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const { data } = await axios.post(endpoint, payload);
 
       if (data.success) {
-        localStorage.setItem("token", data.token);
-        setToken(data.token);
         setIsLoggedIn(true);
         getUserData();
         navigate("/");
@@ -55,12 +49,6 @@ const Login = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-purple-400">

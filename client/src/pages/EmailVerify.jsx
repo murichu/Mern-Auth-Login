@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const EmailVerify = () => {
   const navigate = useNavigate();
-  const { backendUrl, isLoggedin, userData, getUserData, token } = useContext(AppContext);
+  const { backendUrl, isLoggedin, userData, getUserData} = useContext(AppContext);
   const inputRefs = useRef([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,7 +42,7 @@ const EmailVerify = () => {
     setIsLoading(true);
     try {
       const otp = inputRefs.current.map(input => input.value).join('');
-      const { data } = await axios.post(`${backendUrl}/api/auth/verify-account`, { otp }, { headers: { token } });
+      const { data } = await axios.post(`${backendUrl}/api/auth/verify-account`, { otp });
 
       if (data.success) {
         toast.success(data.message);

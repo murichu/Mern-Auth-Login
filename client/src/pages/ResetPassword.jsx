@@ -7,8 +7,8 @@ import { AppContext } from '../context/AppContext'; // Global context for shared
 import { toast } from 'react-toastify'; // Toast notifications for user feedback
 
 const ResetPassword = () => {
-  // Access backend URL and token from context
-  const { backendUrl, token } = useContext(AppContext);
+  // Access backend URL from context
+  const { backendUrl } = useContext(AppContext);
   
   // Enable credentials sharing in Axios requests
   axios.defaults.withCredentials = true;
@@ -61,10 +61,8 @@ const ResetPassword = () => {
     try {
       setIsLoading(true); // Set loading state to true
       const { data } = await axios.post(
-        `${backendUrl}/api/auth/send-reset-otp`,
-        { email },
-        { headers: { token } }
-      );
+        `${backendUrl}/api/auth/send-reset-otp`, { email });
+
       if (data.success) {
         toast.success(data.message); // Show success toast
         setIsEmailSent(true); // Mark email as sent
@@ -102,9 +100,7 @@ const ResetPassword = () => {
       setIsLoading(true); // Set loading state to true
       const { data } = await axios.post(
         `${backendUrl}/api/auth/reset-password`,
-        { email, otp, newPassword, confirmPassword },
-        { headers: { token } }
-      );
+        { email, otp, newPassword, confirmPassword });
       if (data.success) {
         toast.success(data.message); // Show success toast
         // Reset form states
