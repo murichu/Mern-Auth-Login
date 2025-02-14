@@ -2,62 +2,48 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-
-
 export const AppContext = createContext();
 
-const AppContextProvider = ({ children }) => {
+export const AppContextProvider = ({ children }) => {
 
     axios.defaults.withCredentials = true;
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
-    const [ userData, setUserData ] = useState(false);
-
-    const [token, setToken] = useState(
-        localStorage.getItem("token") ? localStorage.getItem("token") : false);
-
-
+    const [ userData, setUserData ] = useState(null);
+ 
     const getAuthState = async () => {
         try {
-
-           const { data } = await axios.get(backendUrl + "/api/auth/is-auth", {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-           
-           if (data.success) {
+          const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
+          if (data.success) {
             setIsLoggedIn(true);
-            if (!userData) getUserData();
-           }
+            if (!userData) await getUserData();
+          }
         } catch (error) {
-            toast.error(error.response?.data?.message || error.message || "Failed to authenticate");
+          toast.error(error.response?.data?.message || "Failed to authenticate. Please try again later.");
         }
-    }
+      };
+      
     
 
-    const getUserData = async () => {
+      const getUserData = async () => {
         try {
-            const { data } = await axios.get(backendUrl + '/api/user/data');
-            data.success ? setUserData(data.userData) : toast.error(data.message);
+          const { data } = await axios.get(`${backendUrl}/api/user/data`);
+          if (data.success) {
+            setUserData(data.userData);
+          } else {
+            toast.error(data.message);
+          }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to fetch user data') 
-        }
-      }
+          toast.error(error.response?.data?.message || "Failed to fetch user data");
+        } 
+      };
 
     
     useEffect(()=> {
         getAuthState();
     },[])
-
-    useEffect(() => {
-        if (token) {
-            localStorage.setItem("token", token);
-        } else {
-            localStorage.removeItem("token");
-        }
-    }, [token]);
-
 
     const value = {
         backendUrl,
@@ -65,8 +51,6 @@ const AppContextProvider = ({ children }) => {
         setIsLoggedIn,
         userData,
         setUserData,
-        token,
-        setToken,
         getUserData,
     };
 
