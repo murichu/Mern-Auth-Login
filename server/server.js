@@ -2,9 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-//import connectDB from "./config/mongoDb.js";
-//import authRouter from './routes/authRoutes.js';
-//import userRouter from './routes/userRoutes.js';
+import connectDB from "./config/mongoDb.js";
+import authRouter from './routes/authRoutes.js';
+import userRouter from './routes/userRoutes.js';
 
 
 // Load environment variables
@@ -14,7 +14,7 @@ dotenv.config();
 const app = express();
 
 // Database Connection
-//connectDB();
+connectDB();
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -34,8 +34,8 @@ app.get('/', (req, res) => {
 });
 
 // API Endpoints
-//app.use('/api/auth', authRouter);
-//app.use('/api/user', userRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
 
 
 // Set the port
