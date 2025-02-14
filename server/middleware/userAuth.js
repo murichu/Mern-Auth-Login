@@ -27,11 +27,12 @@ const userAuth = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "User not found. Please register again." });
         }
 
-        // Validate session
-        if (userId.currentSession && userId.currentSession !== tokenDecode.sessionId) {
-            return res.status(403).json({ success: false, message: "Session expired or invalid." });
-        }
+          // Validate session
+    if (userId.currentSession && userId.currentSession !== tokenDecode.sessionId) {
+        return res.status(403).json({ success: false, message: "Session expired or invalid." });
+    }
 
+        
         next(); // Proceed to the next middleware or route
     } catch (error) {
         console.error("Error in userAuth middleware:", error);
