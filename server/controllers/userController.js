@@ -2,7 +2,7 @@ import UserModel from '../models/userModel.js';
 
 export const getUserData = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.cookies;
 
     // Check if userId exists
     if (!userId) {
