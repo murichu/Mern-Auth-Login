@@ -2,7 +2,21 @@ import UserModel from '../models/userModel.js';
 
 export const getUserData = async (req, res) => {
   try {
-    const { userId } = req.cookies;
+    const { token } = req.cookies;
+
+    // Check if token exists
+    if (!token) {
+      return res.status(401).json({ success: false, message: "No token provided" });
+    }
+
+    // Verify token and extract user ID and session ID
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { id: userId } = decoded;
+
+    // Validate userId
+    if (!userId || !validator.isMongoId(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid user ID" });
+    }
 
     // Check if userId exists
     if (!userId) {
@@ -11,14 +25,11 @@ export const getUserData = async (req, res) => {
         .json({ success: false, message: "Missing userId in request body." });
     }
 
-    // Fetch user by ID
-    const user = await UserModel.findById(userId);
 
-    // Handle case where user is not found
+    // Find user in the database
+    const user = await UserModel.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found." });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     // Return user data
