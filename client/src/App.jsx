@@ -7,7 +7,7 @@ import ResetPassword from "./pages/ResetPassword";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { AppContext } from "../context/AppContext";
+import { AppContext } from "./context/AppContext";
 
 let logoutTimer; // Global variable to track logout timeout
 
