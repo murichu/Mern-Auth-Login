@@ -16,7 +16,7 @@ const App = () => {
 
   // Function to handle auto-logout
   const autoLogout = () => {
-    setIsLoggedIn(false);
+    setIsLoggedIn(true);
     toast.error("Session expired. Please log in again.");
     window.location.href = "/login";
   };
